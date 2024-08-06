@@ -1,83 +1,64 @@
-root{
-   --cor-de-fundo:#1E1E1E;
-   --verde:#6FFF57;
-   --branco: #FFFFFF;
-   --botao-ativo: #3A375E;
-   --botao-inativo: rgba(58, 55, 94, 0.5);
-   --texto-fund0:rgba(58, 55, 94, 0.3);
-  
+const caixaPrincipal = document.querySelector(".caixa-principal");
+const caixaPerguntas = document.querySelector(".caixa-perguntas");
+const caixaAlternativas = document.querySelector(".caixa-alternativas");
+const caixaResultados = document.querySelector(".caixa-resultado"); // Corrigido para ".caixa-resultado"
+const textoResultado = document.querySelector(".texto-resultado"); // Corrigido para ".texto-resultado"
+
+const perguntas = [
+  {
+    enunciado: "Um dia você volta para casa cansado e deprimido, você já entra direto no quarto se recuperando dos machucados que os alunos da sua escola fizeram em você. Então você decide jogar um jogo aleatório no seu notebook para relaxar. Então você encontra um jogo VR chamado CircDubs.Você quer jogar?",
+    alternativas: [
+      "Poder ser, não parece fazer o meu estilo mais acho que vai me relaxar",
+      "Nah, não tô afim... quer saber acho que vou dormir, vai que assim eu relaxe um pouco"
+    ]
+  },
+  {
+    enunciado: "Após você pensar bastante sobre isso, decidiu que iria jogar só para testar! Então voçê alcança o seu VR que estava na sua estante e coloca em sua cabeça e seu controle remoto. Você vê que a tela do notebook está preta com apenas uma pergunta para decidir Start or Exit?",
+    alternativas: [
+      "Start (Você não pensa duas vezes e apertou start para começar)",
+      "Exit (Você mudou de ideia ja que está muito tarde pra jogar)"
+    ]
+  },
+];
+
+let atual = 0;
+let perguntaAtual;
+
+function mostraPergunta() {
+  perguntaAtual = perguntas[atual];
+  caixaPerguntas.textContent = perguntaAtual.enunciado;
+
+  // Limpar caixa de alternativas antes de adicionar novas
+  caixaAlternativas.innerHTML = '';
+
+  // Iterar sobre as alternativas e adicioná-las à caixa de alternativas
+  perguntaAtual.alternativas.forEach((alternativa, index) => {
+    const divAlternativa = document.createElement('div');
+    divAlternativa.textContent = `${index + 1}. ${alternativa}`;
+    divAlternativa.addEventListener('click', () => selecionarAlternativa(index));
+    caixaAlternativas.appendChild(divAlternativa);
+  });
 }
 
+function selecionarAlternativa(indice) {
+  // Aqui você pode adicionar lógica para tratar a seleção da alternativa
+  const respostaSelecionada = perguntaAtual.alternativas[indice];
+  // Por exemplo, você pode exibir a resposta selecionada na caixa de resultados
+  caixaResultados.textContent = `Você escolheu: ${respostaSelecionada}`;
 
-body{
-   background-color: var(--cor-de-fundo);
-   color: var(--branco);
-   font-family: 'Chakra Petch', sans-serif;
+  // Avançar para a próxima pergunta
+  proximaPergunta();
 }
 
-
-   .conteudo-principal{
-       display: flex;
-       flex-direction: column;
-       justify-content: center;
-       max-width: 1200px;
-width: 100%;
-margin: 0 auto;
-
-
+function proximaPergunta() {
+  atual++;
+  if (atual < perguntas.length) {
+    mostraPergunta();
+  } else {
+    // Caso não haja mais perguntas, você pode exibir uma mensagem de finalização ou realizar outra ação
+    caixaPerguntas.textContent = "Fim das perguntas.";
+    caixaAlternativas.innerHTML = ''; // Limpar caixa de alternativas
+  }
 }
 
-
-.titulo-principal{
-   text-align: left;
-   width: 100;
-font-size: 32px; 
-
-
-}
-
-
-.titulo-principal span{
-   color:var(--verde);
-}
-
-
-.botão{
-   font-family: "Crakra Pétch", sans-serif;
-   background-color: var(--botao-inativo);
-   color: var(--branco);
-   display: flex;
-   justify-content: center;
-   padding: 1em;
-   font-size: 18px;
-   align-items: center;
-   width: 100%;
-   border-bottom: 4px solid var(--botao-ativo);
-   border-left: 4px solid var(--botao-ativo);
-   border-right: 4px solid var(--botao-ativo);
-border-top: none;
-
-
-}
-
-
-.botão:first-child{
-   border-radius: 40px 40 px 0 0;
-
-
-}
-
-
-.botoes{
-   display: block;
-}
-@media screen and (min-width: 768px) {
-   .botoes{
-       display:flex;
-   }
-   .botao:first-child{
-       border-radius: 40px 0 0 0;
-   }
-}
-  
-
+mostraPergunta();
